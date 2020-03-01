@@ -1,9 +1,17 @@
 class ToDoList{
-  constructor(id, title, urgent, tasks){
-    this.id = id;
+  constructor(title, tasks){
+    this.id = this.nextId()
     this.title = title;
     this.urgent = false;
     this.tasks  =[];
+    //make this just this.tasks = tasks
+  }
+
+  nextId(){
+    if (ToDoList.nextId === undefined){
+      ToDoList.nextId = 0;
+    }
+    return ToDoList.nextId++;
   }
 
   saveToStorage(){

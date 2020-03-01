@@ -1,6 +1,10 @@
 class Task{
-  constructor(task){
-    this.task = task
+  constructor(name){
+    this.taskName = name;
+    this.id = Date.now();
     this.completed = false;
   }
+
+
+
 }
