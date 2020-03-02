@@ -154,7 +154,7 @@ aside {
   vertical-align: top;
 }
 .task-container{
-  column-width: 30em;
+  column-width: 25em;
   margin-left: 10px;
 }
 
@@ -242,10 +242,17 @@ aside {
   margin-left: 5px
 }
 
-.delete-btn-rough{
+.delete-btn-rough {
   height: 30px;
   width: 30px;
   padding-right: 5px;
+}
+
+.checkbox-btn {
+  height: 25px;
+  width: 25px;
+  padding-right: 5px;
+  padding-top: 10px;
 }
 
 .rough-draft-card{

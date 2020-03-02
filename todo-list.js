@@ -3,7 +3,7 @@ class ToDoList{
     this.id = this.nextId()
     this.title = title;
     this.urgent = false;
-    this.tasks  =[];
+    this.tasks  = tasks;
     //make this just this.tasks = tasks
   }
 
@@ -15,6 +15,9 @@ class ToDoList{
   }
 
   saveToStorage(){
+
+    // var currentList = JSON.stringify(list)
+    // localStorage.setItem('list', list)
 
   }
 
