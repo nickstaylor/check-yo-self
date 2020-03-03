@@ -4,6 +4,7 @@ var roughDraftTask = document.querySelector('.task-item');
 var asideButtons = document.querySelector('.aside-section');
 var taskDisplayArea = document.querySelector('.task-container');
 var taskTitleBox = document.querySelector('.task-title');
+var initialGreeting = document.querySelector('.initial-greeting');
 var tasksDisplayed = "";
 var roughDraftArray = [];
 var list;
@@ -18,8 +19,12 @@ function retrieveToDosFromStorage(){
 
   alllocalStorage = localStorage.getItem('allLists');
   var parseString = JSON.parse(alllocalStorage);
-  if (parseString === null)
-     {return};
+
+  if (parseString === null){
+    initialGreeting.classList.remove('hide');
+    return}
+    else {initialGreeting.classList.add('hide')};
+
   console.log(parseString);
 
   for (var i = 0; i < parseString.length; i++){
@@ -113,6 +118,7 @@ function urgentButton(){
 function makeList(){
   var taskTitle = taskTitleBox.value;
   console.log(taskTitle);
+  initialGreeting.classList.add('hide');
   if((taskTitle === "") || (roughDraftArray.length === 0)){
     //continue working on this later
     return;
