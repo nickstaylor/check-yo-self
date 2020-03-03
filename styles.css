@@ -238,6 +238,7 @@ aside {
 .delete-button-task p{
   margin-right: 5px
 }
+
 .urgent-button p{
   margin-left: 5px
 }
@@ -278,4 +279,18 @@ width: 80%; */
  width: 75%;
  background: #f3f6f7;
  font-size: 24px;
+}
+
+.urgent-font {
+  color: #B23A25;
+}
+
+.urgent-style {
+  border: 2px solid #FFC30C;
+  background-color: #FFE89D;
+}
+
+.task-list-checked{
+  font-style: italic;
+  color: #3c6577;
 }

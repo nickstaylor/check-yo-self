@@ -26,7 +26,7 @@ class ToDoList{
   }
 
   deleteFromStorage(){
-
+    localStorage.clear();
   }
 
   updateToDo(){
@@ -34,6 +34,7 @@ class ToDoList{
   }
 
   updateTask(){
+    task.completed = true;
     //update task content and if it has been completed.
   }
 }

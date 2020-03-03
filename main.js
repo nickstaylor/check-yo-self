@@ -11,7 +11,7 @@ var localStorageArray =[];
 
 asideButtons.addEventListener('click', clickButtons);
 roughDraftSection.addEventListener('click', deleteRoughDraftTask);
-taskDisplayArea.addEventListener('click', addTasks);
+taskDisplayArea.addEventListener('click', modifyTasks);
 window.onload = retrieveToDosFromStorage;
 
 function retrieveToDosFromStorage(){
@@ -23,7 +23,6 @@ function retrieveToDosFromStorage(){
   console.log(parseString);
 
   for (var i = 0; i < parseString.length; i++){
-    // var string = localStorage.getItem(alllocalStorage[i]);
     console.log(parseString);
     var list = new ToDoList (parseString[i].id, parseString[i].title, parseString[i].tasks, parseString[i].urgent);
     localStorageArray.push(list);
@@ -55,6 +54,7 @@ function clearAllAside() {
   roughDraftArray = [];
 
 }
+
 function deleteRoughDraftTask(){
   for (var i = 0; i < roughDraftArray.length; i++){
     var textToRemove = event.target.nextSibling.dataset.id;
@@ -64,22 +64,51 @@ function deleteRoughDraftTask(){
            console.log(roughDraftArray);
         }
       }
-
     if (event.target.className === 'delete-btn-rough'){
+      console.log(event.target.parentNode)
         event.target.parentNode.remove()
       }
 }
 
-function addTasks(){
-  //ugentbutton finction here
-  if (event.target.className === 'task-list'){
-    console.log("I got here");
+function modifyTasks(){
+  // check tasks function here
+  if (event.target.closest('.checkbox-btn')){
+    checkOffTasks()
   }
-  // console.log(event.target.childNodes);
-
-
-
+    //urgentbutton function here
+  if (event.target.closest('.urgent')){
+    urgentButton();
+  }
 }
+
+
+function checkOffTasks(){
+  if (event.target.src.match("images/checkbox.svg")){
+    event.target.src = "images/checkbox-active.svg"
+  } else {event.target.src = "images/checkbox.svg"}
+    event.target.parentNode.classList.toggle('task-list-checked')
+}
+
+function urgentButton(){
+  var target = event.target.parentNode
+
+  if (event.target.src.match("images/urgent.svg")){
+    event.target.src = "images/urgent-active.svg"
+  } else {event.target.src = "images/urgent.svg"}
+
+    //changes font to urgent
+    target.classList.toggle('urgent-font');
+
+    //changes bottom to urgent
+    target.parentNode.classList.toggle('urgent-style');
+
+    // changes top to urgent
+    target.parentNode.parentNode.firstElementChild.classList.toggle('urgent-style'); //top of taskbox
+
+    // changes the middle part to urgent
+    target.parentNode.parentNode.firstElementChild.nextSibling.nextSibling.classList.toggle('urgent-style');
+}
+
 
 function makeList(){
   var taskTitle = taskTitleBox.value;
@@ -104,7 +133,7 @@ function makeList(){
   var tasksDisplayed = "<ul>"
   console.log(tasksDisplayed);
   for (var i = 0; i < list.tasks.length; i++){
-    tasksDisplayed = tasksDisplayed + '<li>' + image + list.tasks[i].taskName + "</li>"
+    tasksDisplayed = tasksDisplayed + '<li class="list-item">' + image + list.tasks[i].taskName + "</li>"
   } tasksDisplayed = tasksDisplayed + "</ul>";
 
 console.log(tasksDisplayed);
