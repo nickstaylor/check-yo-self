@@ -16,8 +16,12 @@ class ToDoList{
 
   saveToStorage(){
 
+    // var storageList = [this.id, this.title, this.urgent, this.tasks]
+    // var storageList = list
+    var currentList = JSON.stringify(this)
     // var currentList = JSON.stringify(list)
-    // localStorage.setItem('list', list)
+    localStorage.setItem((list + this.id), currentList)
+
 
   }
 
