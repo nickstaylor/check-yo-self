@@ -1,9 +1,9 @@
 class ToDoList{
-  constructor(title, tasks){
-    this.id = this.nextId()
+  constructor(id, title, tasks, urgent){
+    this.id = id
     this.title = title;
-    this.urgent = false;
     this.tasks  = tasks;
+    this.urgent = false;
     //make this just this.tasks = tasks
   }
 
@@ -18,9 +18,9 @@ class ToDoList{
 
     // var storageList = [this.id, this.title, this.urgent, this.tasks]
     // var storageList = list
-    var currentList = JSON.stringify(this)
+    var allListsInStorage = JSON.stringify(localStorageArray)
     // var currentList = JSON.stringify(list)
-    localStorage.setItem((list + this.id), currentList)
+    localStorage.setItem(('allLists'), allListsInStorage)
 
 
   }

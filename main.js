@@ -7,6 +7,7 @@ var taskTitleBox = document.querySelector('.task-title');
 var tasksDisplayed = "";
 var roughDraftArray = [];
 var list;
+var localStorageArray =[];
 
 asideButtons.addEventListener('click', clickButtons);
 roughDraftSection.addEventListener('click', deleteRoughDraftTask);
@@ -15,47 +16,23 @@ window.onload = retrieveToDosFromStorage;
 
 function retrieveToDosFromStorage(){
 
-  alllocalStorage = Object.keys(localStorage);
-  console.log(alllocalStorage);
-  for (var i = 0; i < alllocalStorage.length; i++){
-    var string = localStorage.getItem(alllocalStorage[i]);
-    var parseString = JSON.parse(string);
+  alllocalStorage = localStorage.getItem('allLists');
+  var parseString = JSON.parse(alllocalStorage);
+  if (parseString === null)
+     {return};
+  console.log(parseString);
+
+  for (var i = 0; i < parseString.length; i++){
+    // var string = localStorage.getItem(alllocalStorage[i]);
     console.log(parseString);
-    var list = new ToDoList (parseString.title, parseString.tasks);
+    var list = new ToDoList (parseString[i].id, parseString[i].title, parseString[i].tasks, parseString[i].urgent);
+    localStorageArray.push(list);
     console.log(list)
-
-    }
-
-
-    var image = `<img src="images/checkbox.svg"
-     alt="checkbox button" class="checkbox-btn" />`
-    var tasksDisplayed = "<ul>"
-    for (var i = 0; i < parseString.tasks.length; i++){
-      tasksDisplayed = tasksDisplayed + '<li>' + image + parseString.tasks[i].taskName + "</li>"
-    } tasksDisplayed = tasksDisplayed + "</ul>";
-
-  console.log(tasksDisplayed);
-
-    taskDisplayArea.insertAdjacentHTML('beforeend', `
-    <section class="taskbox taskbox${parseString.id}">
-      <div class="top-of-taskbox">
-        <p id="taskbox-title">${parseString.title}</p>
-      </div>
-      <div class="task-list">
-          ${tasksDisplayed}
-      </div>
-      <div class="bottom-of-taskbox">
-        <div class="urgent-button">
-          <img class="urgent" src="images/urgent.svg">
-          <p>URGENT</p>
-        </div>
-        <div class="delete-button-task">
-          <img class="delete" src="images/delete.svg">
-          <p>DELETE</p>
-      </div>
-    </section>`)
+    displayCard(parseString[i].title, list)
 
   }
+}
+
 
 
 function clickButtons(event){
@@ -76,7 +53,6 @@ function clearAllAside() {
   roughDraftSection.innerText = "";
   taskTitleBox.value = "";
   roughDraftArray = [];
-  console.log(roughDraftArray);
 
 }
 function deleteRoughDraftTask(){
@@ -108,14 +84,19 @@ function addTasks(){
 function makeList(){
   var taskTitle = taskTitleBox.value;
   console.log(taskTitle);
-  if((taskTitle === "") && (roughDraftArray.length === 0)){
+  if((taskTitle === "") || (roughDraftArray.length === 0)){
     //continue working on this later
     return;
   }
     //clear left side out here, reset it.
-  var list = new ToDoList (taskTitle, roughDraftArray);
+  var list = new ToDoList (Date.now(), taskTitle, roughDraftArray);
+  localStorageArray.push(list);
   list.saveToStorage();
+  displayCard(taskTitle, list)
   //move list to larger array of lists on localStorage- why do this?
+}
+
+  function displayCard(taskTitle, list){
 
   console.log(list);
   var image = `<img src="images/checkbox.svg"
