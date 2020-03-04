@@ -28,20 +28,20 @@ This project was a huge success for me!  I feel like I took some really big step
 ## Screenshots the Comp:
 
 #### Initial Layout:
-``![Screen Shot 2020-03-03 at 6 26 59 PM](https://user-images.githubusercontent.com/44849120/75839154-fe9c1500-5dbf-11ea-90bf-134cf4e7c932.png)``
+![Screen Shot 2020-03-03 at 6 26 59 PM](https://user-images.githubusercontent.com/44849120/75839154-fe9c1500-5dbf-11ea-90bf-134cf4e7c932.png)
 
 ### Creating a list:
-``![Screen Shot 2020-03-03 at 6 28 36 PM](https://user-images.githubusercontent.com/44849120/75839247-4c188200-5dc0-11ea-8752-69ef1d2434db.png)``
+![Screen Shot 2020-03-03 at 6 28 36 PM](https://user-images.githubusercontent.com/44849120/75839247-4c188200-5dc0-11ea-8752-69ef1d2434db.png)
 
 ### Multiple List Displayed on the Right Side:
-``![Screen Shot 2020-03-03 at 6 46 42 PM](https://user-images.githubusercontent.com/44849120/75839308-766a3f80-5dc0-11ea-9ded-c3befbf914fd.png)``
+![Screen Shot 2020-03-03 at 6 46 42 PM](https://user-images.githubusercontent.com/44849120/75839308-766a3f80-5dc0-11ea-9ded-c3befbf914fd.png)
 
 ### Urgent Tasks Highlighted
-``![Screen Shot 2020-03-03 at 6 47 46 PM](https://user-images.githubusercontent.com/44849120/75839359-96016800-5dc0-11ea-8edf-10b293522cd0.png)``
+![Screen Shot 2020-03-03 at 6 47 46 PM](https://user-images.githubusercontent.com/44849120/75839359-96016800-5dc0-11ea-8edf-10b293522cd0.png)
 
 ### Checking off Items in each list
-``
-![Screen Shot 2020-03-03 at 6 48 09 PM](https://user-images.githubusercontent.com/44849120/75839410-add8ec00-5dc0-11ea-9e62-be768264038b.png)``
+
+![Screen Shot 2020-03-03 at 6 48 09 PM](https://user-images.githubusercontent.com/44849120/75839410-add8ec00-5dc0-11ea-9e62-be768264038b.png)
 
 
 
