@@ -1,11 +1,9 @@
-html, body{
+html, body {
   height: 100%;
   width: 100%;
   font-family: sans-serif;
-  }
+}
 
-
-/* header styling */
 header {
   border: 1px solid black;
   height: 10vh;
@@ -15,7 +13,7 @@ header {
   background-color: #1f1f3d;
 }
 
-header h1{
+header h1 {
   color: #FFFFFF;
   padding-left: 50px;
   font-size: 40px;
@@ -25,7 +23,6 @@ header h1{
 span {
   color: #FFC30C;
 }
-
 
 .search-container input {
   width: 300px;
@@ -42,17 +39,12 @@ span {
   height: 40px;
   width: 40px;
 }
-/* end of header section */
-
 
 main {
   height: 90vh;
   display: flex;
 }
 
-
-
-/* left-side section */
 aside {
   height: 90vh;
   width: 30%;
@@ -60,7 +52,7 @@ aside {
   vertical-align: top;
 }
 
-.aside-section{
+.aside-section {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -68,12 +60,12 @@ aside {
   height: 90vh;
 }
 
-.aside-title{
+.aside-title {
   width: 90%;
   margin-bottom: 30px;
 }
 
-.aside-title input{
+.aside-title input {
   width: 100%;
   height: 40px;
   margin: auto;
@@ -86,16 +78,15 @@ aside {
   color: #f3f6f7;
 }
 
-.task-item-section{
+.task-item-section {
   display: inline-flex;
 }
 
-
-.aside-task-item{
+.aside-task-item {
   width: 90%;
 }
 
-.rough-draft-card{
+.rough-draft-card {
   width: 90%;
 }
 
@@ -115,7 +106,7 @@ aside {
   font-size: 32px;
 }
 
-.aside-button{
+.aside-button {
   width: 90%;
   background-color: #1f1f3d;
   color: #FFFFFF;
@@ -123,12 +114,10 @@ aside {
   box-sizing: border-box;
   font-size: 20px;
   height: 40px;
-  outline: none:
-  border: 0px;
+  outline: none: border: 0px;
 }
 
-.aside-filter-box{
-
+.aside-filter-box {
   border-top: 2px solid #3c6577;
   margin-top: 60px;
   width: 100%;
@@ -136,16 +125,15 @@ aside {
   justify-content: center;
 }
 
-.filter{
+.filter {
   align: center;
 }
 
-.filter:hover{
-    background-color: #EF4A23;
+.filter:hover {
+  background-color: #EF4A23;
 }
 
-/* right side of page */
-.right-side{
+.right-side {
   display: inline-block;
   height: 90vh;
   width: 75%;
@@ -153,7 +141,7 @@ aside {
   vertical-align: top;
 }
 
-.hide{
+.hide {
   display: none;
 }
 
@@ -164,26 +152,25 @@ aside {
   font-size: 24px;
 }
 
-.task-container{
+.task-container {
   column-width: 25em;
   margin-left: 10px;
+  margin-top: 10px;
 }
 
-.taskbox{
+.taskbox {
   display: inline-block;
   margin-left: 10%;
   margin-right: 10%;
-
   width: 70%;
   height: 300px;
   background-color: #FAFDFF;
 }
 
-.top-of-taskbox{
+.top-of-taskbox {
   border: 2px solid #c7d3d8;
   color: #1f1f3d;
   height: 15%;
-
 }
 
 #taskbox-title {
@@ -199,19 +186,18 @@ aside {
   margin-left: -30px;
 }
 
-.task-list ul li{
+.task-list ul li {
   margin-top: 10px;
 }
 
-.task-list{
+.task-list {
   border: 2px solid #c7d3d8;
   color: #1f1f3d;
   font-size: 30px;
   height: auto;
-
 }
 
-.bottom-of-taskbox{
+.bottom-of-taskbox {
   height: 20%;
   display: flex;
   justify-content: space-between;
@@ -223,8 +209,7 @@ aside {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center:
-  border: none;
+  align-items: center: border: none;
 }
 
 .urgent-button img {
@@ -269,10 +254,10 @@ aside {
 }
 
 .rough-draft-card {
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: #FFFFFF;
 }
 
 .roughdraftitem {
@@ -282,12 +267,12 @@ color: #FFFFFF;
 }
 
 .task-container section {
- display: inline-block;
- margin:  0.25rem;
- padding:  1rem;
- width: 75%;
- background: #f3f6f7;
- font-size: 24px;
+  display: inline-block;
+  margin: 0.25rem;
+  padding: 1rem;
+  width: 75%;
+  background: #f3f6f7;
+  font-size: 24px;
 }
 
 .urgent-font {

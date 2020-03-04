@@ -4,8 +4,6 @@ class ToDoList{
     this.title = title;
     this.tasks  = tasks;
     this.urgent = urgent || false;
-
-    //make this just this.tasks = tasks
   }
 
   saveToStorage(){
@@ -13,16 +11,8 @@ class ToDoList{
     localStorage.setItem(('allLists'), allListsInStorage)
   }
 
-  deleteFromStorage(){
-    localStorage.clear();
-  }
-
   updateToDo(){
     this.urgent = !this.urgent;
   }
 
-  updateTask(){
-    task.completed = true;
-    //update task content and if it has been completed.
-  }
 }
