@@ -4,7 +4,4 @@ class Task{
     this.id = Date.now();
     this.completed = false;
   }
-
-
-
 }

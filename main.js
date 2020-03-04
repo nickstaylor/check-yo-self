@@ -16,28 +16,29 @@ taskDisplayArea.addEventListener('click', modifyTasks);
 window.onload = retrieveToDosFromStorage;
 
 function retrieveToDosFromStorage(){
-
   alllocalStorage = localStorage.getItem('allLists');
   var parseString = JSON.parse(alllocalStorage);
 
   if (parseString === null){
     initialGreeting.classList.remove('hide');
     return}
-    else {initialGreeting.classList.add('hide')};
-
-  console.log(parseString);
+    else {initialGreeting.classList.add('hide')
+  };
 
   for (var i = 0; i < parseString.length; i++){
     console.log(parseString);
     var list = new ToDoList (parseString[i].id, parseString[i].title, parseString[i].tasks, parseString[i].urgent);
+    console.log(parseString[i].urgent)
     localStorageArray.push(list);
     console.log(list)
-    displayCard(parseString[i].title, list)
+    if (list.urgent == true){
+      reloadUrgentColors(parseString[i].title, list)
+    }
+     else {displayCard(parseString[i].title, list)}
 
+    //if parseString.urgent === true, then invoke the urgent styling function
   }
 }
-
-
 
 function clickButtons(event){
   var target = event.target.classList;
@@ -52,12 +53,10 @@ function clickButtons(event){
     }
 }
 
-
 function clearAllAside() {
   roughDraftSection.innerText = "";
   taskTitleBox.value = "";
   roughDraftArray = [];
-
 }
 
 function deleteRoughDraftTask(){
@@ -70,7 +69,6 @@ function deleteRoughDraftTask(){
         }
       }
     if (event.target.className === 'delete-btn-rough'){
-      console.log(event.target.parentNode)
         event.target.parentNode.remove()
       }
 }
@@ -91,12 +89,14 @@ function checkOffTasks(){
   if (event.target.src.match("images/checkbox.svg")){
     event.target.src = "images/checkbox-active.svg"
   } else {event.target.src = "images/checkbox.svg"}
+
     event.target.parentNode.classList.toggle('task-list-checked')
 }
 
+
 function urgentButton(){
   var target = event.target.parentNode
-
+  console.log(target.parentNode.parentNode)
   if (event.target.src.match("images/urgent.svg")){
     event.target.src = "images/urgent-active.svg"
   } else {event.target.src = "images/urgent.svg"}
@@ -108,44 +108,82 @@ function urgentButton(){
     target.parentNode.classList.toggle('urgent-style');
 
     // changes top to urgent
-    target.parentNode.parentNode.firstElementChild.classList.toggle('urgent-style'); //top of taskbox
+    target.parentNode.parentNode.firstElementChild.classList.toggle('urgent-style');
 
     // changes the middle part to urgent
     target.parentNode.parentNode.firstElementChild.nextSibling.nextSibling.classList.toggle('urgent-style');
+
+    console.log(target.parentNode.parentNode.dataset.id)
+    for (var i = 0; i < localStorageArray.length; i++){
+      if (target.parentNode.parentNode.dataset.id == localStorageArray[i].id)
+      // { localStorageArray[i].urgent = !localStorageArray[i].urgent;
+      {localStorageArray[i].updateToDo();
+        localStorageArray[i].saveToStorage();
+        console.log(localStorageArray[i])}
+      }
 }
 
 
 function makeList(){
   var taskTitle = taskTitleBox.value;
-  console.log(taskTitle);
   initialGreeting.classList.add('hide');
   if((taskTitle === "") || (roughDraftArray.length === 0)){
-    //continue working on this later
     return;
   }
-    //clear left side out here, reset it.
+
   var list = new ToDoList (Date.now(), taskTitle, roughDraftArray);
   localStorageArray.push(list);
   list.saveToStorage();
   displayCard(taskTitle, list)
-  //move list to larger array of lists on localStorage- why do this?
+
 }
 
-  function displayCard(taskTitle, list){
 
-  console.log(list);
-  var image = `<img src="images/checkbox.svg"
-   alt="checkbox button" class="checkbox-btn" />`
+function reloadUrgentColors(taskTitle, list){
   var tasksDisplayed = "<ul>"
-  console.log(tasksDisplayed);
   for (var i = 0; i < list.tasks.length; i++){
+    var image = `<img src="images/checkbox.svg"
+    alt="checkbox button" class="checkbox-btn data-id=${list.tasks[i].id}" />`
     tasksDisplayed = tasksDisplayed + '<li class="list-item">' + image + list.tasks[i].taskName + "</li>"
   } tasksDisplayed = tasksDisplayed + "</ul>";
 
-console.log(tasksDisplayed);
+console.log(tasksDisplayed)
+
+taskDisplayArea.insertAdjacentHTML('beforeend', `
+<section class="taskbox taskbox${list.id}" data-id=${list.id}>
+  <div class="top-of-taskbox urgent-style">
+    <p id="taskbox-title">${list.title}</p>
+  </div>
+  <div class="task-list urgent-style">
+      ${tasksDisplayed}
+  </div>
+  <div class="bottom-of-taskbox urgent-style">
+    <div class="urgent-button urgent-font">
+      <img class="urgent" src="images/urgent-active.svg">
+      <p>URGENT</p>
+    </div>
+    <div class="delete-button-task">
+      <img class="delete" src="images/delete.svg">
+      <p>DELETE</p>
+  </div>
+</section>`)
+clearAllAside();
+
+
+}
+
+  function displayCard(taskTitle, list){
+    var tasksDisplayed = "<ul>"
+    for (var i = 0; i < list.tasks.length; i++){
+      var image = `<img src="images/checkbox.svg"
+      alt="checkbox button" class="checkbox-btn data-id=${list.tasks[i].id}" />`
+      tasksDisplayed = tasksDisplayed + '<li class="list-item">' + image + list.tasks[i].taskName + "</li>"
+    } tasksDisplayed = tasksDisplayed + "</ul>";
+
+    console.log(tasksDisplayed)
 
   taskDisplayArea.insertAdjacentHTML('beforeend', `
-  <section class="taskbox taskbox${list.id}">
+  <section class="taskbox taskbox${list.id}" data-id=${list.id}>
     <div class="top-of-taskbox">
       <p id="taskbox-title">${list.title}</p>
     </div>
@@ -173,11 +211,9 @@ function addRoughDraftTasks(){
   } else {
   var task = new Task(roughDraftTask.value);
   roughDraftSection.insertAdjacentHTML('beforeend', `
-  <div class="roughdraftitem"><img src="images/delete.svg"
-   alt="delete button" class="delete-btn-rough" /><p data-id=${task.id}>${task.taskName}</p></div>`);
-   console.log(task);
+    <div class="roughdraftitem"><img src="images/delete.svg"
+    alt="delete button" class="delete-btn-rough" /><p data-id=${task.id}>${task.taskName}</p></div>`);
    roughDraftArray.push(task);
-   console.log(roughDraftArray);
    roughDraftTask.value = "";
-}
+ }
 }

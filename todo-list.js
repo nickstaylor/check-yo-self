@@ -3,26 +3,14 @@ class ToDoList{
     this.id = id
     this.title = title;
     this.tasks  = tasks;
-    this.urgent = false;
+    this.urgent = urgent || false;
+
     //make this just this.tasks = tasks
   }
 
-  nextId(){
-    if (ToDoList.nextId === undefined){
-      ToDoList.nextId = 0;
-    }
-    return ToDoList.nextId++;
-  }
-
   saveToStorage(){
-
-    // var storageList = [this.id, this.title, this.urgent, this.tasks]
-    // var storageList = list
     var allListsInStorage = JSON.stringify(localStorageArray)
-    // var currentList = JSON.stringify(list)
     localStorage.setItem(('allLists'), allListsInStorage)
-
-
   }
 
   deleteFromStorage(){
@@ -30,7 +18,7 @@ class ToDoList{
   }
 
   updateToDo(){
-    //should update todo's title and urgency
+    this.urgent = !this.urgent;
   }
 
   updateTask(){
