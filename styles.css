@@ -2,6 +2,7 @@ html, body {
   height: 100%;
   width: 100%;
   font-family: sans-serif;
+  overflow: hidden;
 }
 
 header {
@@ -50,6 +51,7 @@ aside {
   width: 30%;
   background-color: #587a8a;
   vertical-align: top;
+  overflow: scroll;
 }
 
 .aside-section {
@@ -117,6 +119,10 @@ aside {
   outline: none: border: 0px;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 .aside-filter-box {
   border-top: 2px solid #3c6577;
   margin-top: 60px;
@@ -125,20 +131,18 @@ aside {
   justify-content: center;
 }
 
-.filter {
-  align: center;
-}
-
 .filter:hover {
   background-color: #EF4A23;
 }
 
 .right-side {
+  padding: 1em;
   display: inline-block;
   height: 90vh;
   width: 75%;
   background-color: #f3f6f7;
   vertical-align: top;
+  overflow: scroll;
 }
 
 .hide {
@@ -153,15 +157,15 @@ aside {
 }
 
 .task-container {
-  column-width: 25em;
-  margin-left: 10px;
-  margin-top: 10px;
+  column-width: 20em;
+  margin-left: 5px;
+  margin-top: 5px;
 }
 
 .taskbox {
   display: inline-block;
-  margin-left: 10%;
-  margin-right: 10%;
+  /* margin-left: 10%;
+  margin-right: 10%; */
   width: 70%;
   height: 300px;
   background-color: #FAFDFF;
@@ -209,7 +213,8 @@ aside {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center: border: none;
+  align-items: center;
+  border: none;
 }
 
 .urgent-button img {
@@ -234,6 +239,10 @@ aside {
 
 .delete-button-task p {
   margin-right: 5px
+}
+
+.delete-button-task:hover {
+  cursor: pointer;
 }
 
 .urgent-button p {
