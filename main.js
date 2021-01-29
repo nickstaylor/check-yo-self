@@ -4,37 +4,36 @@ var asideButtons = document.querySelector('.aside-section');
 var taskDisplayArea = document.querySelector('.task-container');
 var taskTitleBox = document.querySelector('.task-title');
 var initialGreeting = document.querySelector('.initial-greeting');
-var tasksDisplayed = "";
 var roughDraftArray = [];
 var localStorageArray = [];
-var list;
 
-asideButtons.addEventListener('click', clickButtons);
+asideButtons.addEventListener('click', clickAsideButtons);
 roughDraftSection.addEventListener('click', deleteRoughDraftTask);
 taskDisplayArea.addEventListener('click', modifyTasks);
 window.onload = retrieveToDosFromStorage;
 
 function retrieveToDosFromStorage() {
-  alllocalStorage = localStorage.getItem('allLists');
-  var parseString = JSON.parse(alllocalStorage);
-  if (parseString === null) {
+  let localStorageLists = localStorage.getItem('allLists');
+  var retrievedLists = JSON.parse(localStorageLists);
+  if (!retrievedLists) {
     initialGreeting.classList.remove('hide');
     return
-  } else {
-    initialGreeting.classList.add('hide')
   }
-  for (var i = 0; i < parseString.length; i++) {
-    var list = new ToDoList(parseString[i].id, parseString[i].title, parseString[i].tasks, parseString[i].urgent);
+  initialGreeting.classList.add('hide')
+  
+  for (var i = 0; i < retrievedLists.length; i++) {
+    var list = new ToDoList(retrievedLists[i].id, retrievedLists[i].title, retrievedLists[i].tasks, retrievedLists[i].urgent);
     localStorageArray.push(list);
-    if (list.urgent == true) {
-      reloadUrgentColors(parseString[i].title, list)
-    } else {
-      displayCard(parseString[i].title, list)
-    }
+    displayCard(list)
+    // if (list.urgent) {
+    //   reloadUrgentColors(list)
+    // } else {
+    //   displayCard(list)
+    // }
   }
 }
 
-function clickButtons(event) {
+function clickAsideButtons(event) {
   var target = event.target.classList;
   if (target.contains('add-task-button')) {
     addRoughDraftTasks()
@@ -53,7 +52,7 @@ function clearAllAside() {
   roughDraftArray = [];
 }
 
-function deleteRoughDraftTask() {
+function deleteRoughDraftTask(event) {
   for (var i = 0; i < roughDraftArray.length; i++) {
     var textToRemove = event.target.nextSibling.dataset.id;
     var textNumber = parseInt(textToRemove);
@@ -66,7 +65,7 @@ function deleteRoughDraftTask() {
   }
 }
 
-function modifyTasks() {
+function modifyTasks(event) {
   if (event.target.closest('.checkbox-btn')) {
     checkOffTasks()
   }
@@ -87,6 +86,7 @@ function checkOffTasks() {
 
 function urgentButton() {
   var target = event.target.parentNode
+  console.log(target);
   var taskBox = target.parentNode.parentNode
   if (event.target.src.match("images/urgent.svg")) {
     event.target.src = "images/urgent-active.svg"
@@ -102,7 +102,7 @@ function urgentButton() {
   // changes the middle part to urgent
   target.parentNode.parentNode.firstElementChild.nextSibling.nextSibling.classList.toggle('urgent-style');
   for (var i = 0; i < localStorageArray.length; i++) {
-    if (taskBox.dataset.id == localStorageArray[i].id) {
+    if (parseInt(taskBox.dataset.id) === localStorageArray[i].id) {
       localStorageArray[i].updateToDo();
       localStorageArray[i].saveToStorage();
     }
@@ -118,10 +118,14 @@ function makeList() {
   var list = new ToDoList(Date.now(), taskTitle, roughDraftArray);
   localStorageArray.push(list);
   list.saveToStorage();
-  displayCard(taskTitle, list);
+  displayCard(list);
 }
 
-function reloadUrgentColors(taskTitle, list) {
+function deleteTaskList(id) {
+  console.log(id);
+}
+
+function reloadUrgentColors(list) {
   var tasksDisplayed = "<ul>"
   for (var i = 0; i < list.tasks.length; i++) {
     var image = `<img src="images/checkbox.svg"
@@ -129,7 +133,9 @@ function reloadUrgentColors(taskTitle, list) {
     tasksDisplayed = tasksDisplayed + '<li class="list-item">' + image + list.tasks[i].taskName + "</li>"
   }
   tasksDisplayed = tasksDisplayed + "</ul>";
-  taskDisplayArea.insertAdjacentHTML('beforeend', `
+  taskDisplayArea.insertAdjacentHTML(
+    "beforeend",
+    `
   <section class="taskbox taskbox${list.id}" data-id=${list.id}>
     <div class="top-of-taskbox urgent-style">
       <p id="taskbox-title">${list.title}</p>
@@ -142,15 +148,17 @@ function reloadUrgentColors(taskTitle, list) {
         <img class="urgent" src="images/urgent-active.svg">
         <p>URGENT</p>
       </div>
-      <div class="delete-button-task">
-        <img class="delete" src="images/delete.svg">
+      <div class="delete-button-task" onclick="deleteTaskList(${list.id})">
+        <img src="images/delete.svg">
         <p>DELETE</p>
     </div>
-  </section>`)
+  </section>`
+  );
   clearAllAside();
 }
 
-function displayCard(taskTitle, list) {
+function displayCard(list) {
+  console.log(list.urgent);
   var tasksDisplayed = "<ul>"
   for (var i = 0; i < list.tasks.length; i++) {
     var image = `<img src="images/checkbox.svg"
@@ -158,30 +166,33 @@ function displayCard(taskTitle, list) {
     tasksDisplayed = tasksDisplayed + '<li class="list-item">' + image + list.tasks[i].taskName + "</li>"
   }
   tasksDisplayed = tasksDisplayed + "</ul>";
-  taskDisplayArea.insertAdjacentHTML('beforeend', `
+  taskDisplayArea.insertAdjacentHTML(
+    "beforeend",
+    `
   <section class="taskbox taskbox${list.id}" data-id=${list.id}>
-    <div class="top-of-taskbox">
+    <div class="top-of-taskbox ${list.urgent && "urgent-style"}">
       <p id="taskbox-title">${list.title}</p>
     </div>
-    <div class="task-list">
+    <div class="task-list ${list.urgent && "urgent-style"}">
         ${tasksDisplayed}
     </div>
-    <div class="bottom-of-taskbox">
-      <div class="urgent-button">
-        <img class="urgent" src="images/urgent.svg">
+    <div class="bottom-of-taskbox ${list.urgent && "urgent-style"}">
+      <div class="urgent-button ${list.urgent && "urgent-font"}">
+        <img class="urgent" src=${list.urgent ? "images/urgent-active.svg" : "images/urgent.svg"}>
         <p>URGENT</p>
       </div>
-      <div class="delete-button-task">
-        <img class="delete" src="images/delete.svg">
+      <div class="delete-button-task" onclick="deleteTaskList(${list.id})">
+        <img src="images/delete.svg">
         <p>DELETE</p>
     </div>
-  </section>`)
+  </section>`
+  );
   clearAllAside();
 }
 
 function addRoughDraftTasks() {
-  if (roughDraftTask.value == "") {
-    alert("Please Enter a Task");
+  if (roughDraftTask.value === "") {
+    window.alert("Please Enter a Task");
     return;
   } else {
     var task = new Task(roughDraftTask.value);
