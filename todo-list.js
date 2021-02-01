@@ -11,9 +11,14 @@ class ToDoList {
     localStorage.setItem(('allLists'), allListsInStorage)
   }
 
+  deleteFromStorage() {
+    let allListsInStorage = JSON.stringify(localStorageArray);
+    localStorage.setItem("allLists", allListsInStorage);
+  }
 
   updateToDo() {
     this.urgent = !this.urgent;
+    this.saveToStorage();
   }
 
 }
