@@ -28,6 +28,7 @@ span {
 .search-container input {
   width: 300px;
   font-size: 30px;
+  border-radius: 0 7px 7px 0;
 }
 
 .search-container {
@@ -35,8 +36,13 @@ span {
   margin-right: 40px;
 }
 
+.search-container button {
+
+  border-radius: 7px 0 0 7px;
+}
+
 .search-icon {
-  margin-left: auto;
+  /* margin-left: auto; */
   height: 40px;
   width: 40px;
 }
@@ -51,7 +57,7 @@ aside {
   width: 30%;
   background-color: #587a8a;
   vertical-align: top;
-  overflow: scroll;
+  overflow: hidden;
 }
 
 .aside-section {
@@ -59,18 +65,18 @@ aside {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: 90vh;
+  /* height: 90vh; */
 }
 
 .aside-title {
   width: 90%;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
+  margin: 0 5% 30px 5%;
 }
 
 .aside-title input {
-  width: 100%;
+  width: 97%;
   height: 40px;
-  margin: auto;
   font-size: 2em;
 }
 
@@ -95,9 +101,7 @@ aside {
 .task-item {
   width: 85%;
   height: 40px;
-  margin: auto;
-  margin-right: 0px;
-  font-size: 36px;
+  font-size: 24px;
 }
 
 .add-task-button {
@@ -165,7 +169,7 @@ button:hover {
 .taskbox {
   display: inline-block;
   width: 70%;
-  height: 300px;
+  /* height: 300px; */
   background-color: #FAFDFF;
   margin: 0.25rem;
   padding: 1rem;
@@ -176,26 +180,31 @@ button:hover {
 .top-of-taskbox {
   border: 2px solid #c7d3d8;
   color: #1f1f3d;
-  height: 15%;
+  /* height: 15%; */
 }
 
 
 
 #taskbox-title {
-  display: inline-block;
   margin-top: 10px;
   margin-left: 10px;
-  font-size: 30px;
+  margin-bottom: 5px;
+  font-size: 24px;
 }
 
 .task-list ul {
-  font-size: 24px;
+  font-size: 20px;
   list-style: none;
   margin-left: -30px;
 }
 
 .task-list ul li {
-  margin-top: 10px;
+  display: flex;
+  margin-bottom: -10px;
+}
+
+.task-list ul li p {
+  margin-top: 11px;
 }
 
 .task-list {
@@ -211,6 +220,7 @@ button:hover {
   justify-content: space-between;
   align-items: center;
   border: 2px solid #c7d3d8;
+  padding-top: 5px;
 }
 
 .urgent-button {
@@ -222,10 +232,10 @@ button:hover {
 }
 
 .urgent-button img, .delete-button-task img {
-  height: 27px;
-  width: 27px;
-  margin-bottom: 4px;
-  margin-left: 13px;
+  height: 25px;
+  width: 25px;
+  margin-bottom: 2px;
+  margin-left: 10px;
 }
 
 .delete-button-task img {
