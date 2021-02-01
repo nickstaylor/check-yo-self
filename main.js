@@ -5,13 +5,15 @@ var taskDisplayArea = document.querySelector(".task-container");
 var taskTitleBox = document.querySelector(".task-title");
 var initialGreeting = document.querySelector(".initial-greeting");
 var searchInput = document.querySelector(".search-input");
-var roughDraftArray = [];
+var filterButton = document.querySelector(".filter");
+var roughDraftTasks = [];
 var localStorageArray = [];
 
 asideButtons.addEventListener("click", clickAsideButtons);
 roughDraftSection.addEventListener("click", deleteRoughDraftTask);
 taskDisplayArea.addEventListener("click", modifyTasks);
 searchInput.addEventListener("keyup", searchTasks);
+filterButton.addEventListener("click", filterUrgentTasks);
 window.onload = retrieveToDosFromStorage;
 
 function retrieveToDosFromStorage() {
@@ -22,12 +24,16 @@ function retrieveToDosFromStorage() {
     return;
   }
   initialGreeting.classList.add("hide");
-
   for (var i = 0; i < retrievedLists.length; i++) {
+    let tasksArray = []
+    retrievedLists[i].tasks.forEach(task => {
+      var newTask = new Task(task.taskName, task.id, task.completed)
+      tasksArray.push(newTask)
+    })
     var list = new ToDoList(
       retrievedLists[i].id,
       retrievedLists[i].title,
-      retrievedLists[i].tasks,
+      tasksArray,
       retrievedLists[i].urgent
     );
     localStorageArray.push(list);
@@ -36,21 +42,25 @@ function retrieveToDosFromStorage() {
 }
 
 function searchTasks() {
-  let userInput = searchInput.value;
-  let allTaskCards = Array.from(document.querySelectorAll('.taskbox'));
-  allTaskCards.forEach(task => {
+  let userInput = searchInput.value.trim();
+  let allTaskCards = Array.from(document.querySelectorAll(".taskbox"));
+  allTaskCards.forEach((task) => {
     var todoTitle = task.querySelector("#taskbox-title");
-    console.log(todoTitle.innerText);
-    console.log(userInput);
     if (!todoTitle.innerText.includes(userInput)) {
-      console.log('hide');
       task.classList.add("hidden");
     } else {
-      console.log("don't hide");
       task.classList.remove("hidden");
     }
-  })
-  console.log(allTaskCards);
+  });
+}
+
+function filterUrgentTasks() {
+  let allTaskCards = Array.from(document.querySelectorAll(".top-of-taskbox"));
+  allTaskCards.forEach((task) => {
+    if (!task.classList.contains("urgent-style")) {
+      task.parentNode.classList.toggle("hidden");
+    } 
+  });
 }
 
 function clickAsideButtons(event) {
@@ -69,15 +79,15 @@ function clickAsideButtons(event) {
 function clearAllAside() {
   roughDraftSection.innerText = "";
   taskTitleBox.value = "";
-  roughDraftArray = [];
+  roughDraftTasks = [];
 }
 
 function deleteRoughDraftTask(event) {
-  for (var i = 0; i < roughDraftArray.length; i++) {
+  for (var i = 0; i < roughDraftTasks.length; i++) {
     var textToRemove = event.target.nextSibling.dataset.id;
     var textNumber = parseInt(textToRemove);
-    if (textNumber === roughDraftArray[i].id) {
-      roughDraftArray.splice(i, 1);
+    if (textNumber === roughDraftTasks[i].id) {
+      roughDraftTasks.splice(i, 1);
     }
   }
   if (event.target.className === "delete-btn-rough") {
@@ -94,6 +104,7 @@ function modifyTasks(event) {
   }
 }
 
+
 function checkOffTasks() {
   var listImage = event.target;
   if (listImage.src.match("images/checkbox.svg")) {
@@ -102,11 +113,21 @@ function checkOffTasks() {
     listImage.src = "images/checkbox.svg";
   }
   listImage.parentNode.classList.toggle("task-list-checked");
+  let taskId = event.target.dataset.id;
+  console.log(event.target.dataset.id);
+  let taskListId = event.target.closest(".taskbox").dataset.id;
+  let currentTaskList = findCurrentTaskList(taskListId);
+
+  let currentTask = currentTaskList.tasks.find(task => task.id === parseInt(taskId));
+  currentTask.updateTask();
+  console.log(currentTaskList);
+  currentTaskList.saveToStorage();
+  console.log(currentTask);
+
 }
 
 function urgentButton() {
   var target = event.target.parentNode;
-  console.log(event.target);
   var taskBox = target.parentNode.parentNode;
   if (event.target.src.match("images/urgent.svg")) {
     event.target.src = "images/urgent-active.svg";
@@ -128,7 +149,7 @@ function urgentButton() {
   for (var i = 0; i < localStorageArray.length; i++) {
     if (parseInt(taskBox.dataset.id) === localStorageArray[i].id) {
       localStorageArray[i].updateToDo();
-      localStorageArray[i].saveToStorage();
+      // localStorageArray[i].saveToStorage();
     }
   }
 }
@@ -136,40 +157,43 @@ function urgentButton() {
 function makeList() {
   var taskTitle = taskTitleBox.value;
   initialGreeting.classList.add("hide");
-  if (taskTitle === "" || roughDraftArray.length === 0) {
+  if (taskTitle === "" || roughDraftTasks.length === 0) {
     return;
   }
-  var list = new ToDoList(Date.now(), taskTitle, roughDraftArray);
-  localStorageArray.push(list)
-  list.saveToStorage();
-  displayCard(list);
+  var newList = new ToDoList(Date.now(), taskTitle, roughDraftTasks);
+  localStorageArray.push(newList);
+  newList.saveToStorage();
+  displayCard(newList);
+}
+
+function findCurrentTaskList(id) {
+  return localStorageArray.find(list=> list.id === parseInt(id))
 }
 
 function deleteTaskList(id) {
-  console.log(id);
-  let updatedList = localStorageArray.filter((list) => list.id !== id);
-  localStorageArray = updatedList;
+  
+  let currentTaskList = findCurrentTaskList(id)
+
+  let updatedLists = localStorageArray.filter((list) => list.id !== id);
+  localStorageArray = updatedLists;
   if (!localStorageArray.length) {
     initialGreeting.classList.remove("hide");
   }
-  let allListsInStorage = JSON.stringify(updatedList);
-  localStorage.setItem("allLists", allListsInStorage);
+  currentTaskList.deleteFromStorage()
+  event.target.closest(".taskbox").remove();
 
-  if (parseInt(event.target.parentNode.parentNode.parentNode.dataset.id) === id) {
-    event.target.parentNode.parentNode.parentNode.remove();
-  }
 }
 
 function displayCard(list) {
   var tasksDisplayed = "<ul>";
   for (var i = 0; i < list.tasks.length; i++) {
-    var image = `<img src="images/checkbox.svg"
-    alt="checkbox button" class="checkbox-btn" data-id=${list.tasks[i].id} />`;
+    var image = `<img src="${list.tasks[i].completed ? "images/checkbox-active.svg" : "images/checkbox.svg"}"
+    alt="checkbox button" class="checkbox-btn" data-completed=${list.tasks[i].completed} data-id=${list.tasks[i].id} />`;
     tasksDisplayed =
       tasksDisplayed +
-      '<li class="list-item">' +
+      `<li class="list-item ${list.tasks[i].completed && "task-list-checked"}">` +
       image +
-      list.tasks[i].taskName +
+      `<p>${list.tasks[i].taskName}</p>` +
       "</li>";
   }
   tasksDisplayed = tasksDisplayed + "</ul>";
@@ -185,7 +209,8 @@ function displayCard(list) {
     </div>
     <div class="bottom-of-taskbox ${list.urgent && "urgent-style"}">
       <div class="urgent-button ${list.urgent && "urgent-font"}">
-        <img class="urgent" src=${list.urgent ? "images/urgent-active.svg" : "images/urgent.svg"}>
+        <img class="urgent" 
+        src=${list.urgent ? "images/urgent-active.svg" : "images/urgent.svg"}>
         <p>URGENT</p>
       </div>
       <div class="delete-button-task" onclick="deleteTaskList(${list.id})">
@@ -201,7 +226,7 @@ function addRoughDraftTasks() {
   if (roughDraftTask.value === "") {
     window.alert("Please Enter a Task");
     return;
-  } 
+  }
   var task = new Task(roughDraftTask.value);
   roughDraftSection.insertAdjacentHTML(
     "beforeend",
@@ -209,7 +234,7 @@ function addRoughDraftTasks() {
   <div class="roughdraftitem"><img src="images/delete.svg"
   alt="delete button" class="delete-btn-rough" /><p data-id=${task.id}>${task.taskName}</p></div>`
   );
-  roughDraftArray.push(task);
+  roughDraftTasks.push(task);
   roughDraftTask.value = "";
   document.querySelector(".task-item").focus();
 }
