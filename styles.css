@@ -42,7 +42,7 @@ span {
 }
 
 .search-icon {
-  /* margin-left: auto; */
+  margin-top: 5px;
   height: 40px;
   width: 40px;
 }
@@ -168,8 +168,7 @@ button:hover {
 
 .taskbox {
   display: inline-block;
-  width: 70%;
-  /* height: 300px; */
+  width: 75%;
   background-color: #FAFDFF;
   margin: 0.25rem;
   padding: 1rem;
@@ -180,17 +179,37 @@ button:hover {
 .top-of-taskbox {
   border: 2px solid #c7d3d8;
   color: #1f1f3d;
-  /* height: 15%; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
+.top-of-taskbox img {
+  height: 20px;
+  width: 20px;
+  margin-right: 5px;
+}
 
+#save-task-title {
+  margin-top: 5px;
+}
 
-#taskbox-title {
+.top-of-taskbox img:hover {
+  cursor: pointer;
+}
+
+#taskbox-title, .title-input {
   margin-top: 10px;
   margin-left: 10px;
   margin-bottom: 5px;
   font-size: 24px;
 }
+
+.title-input {
+  font-size: 20px;
+  width: 80%;
+}
+
 
 .task-list ul {
   font-size: 20px;
