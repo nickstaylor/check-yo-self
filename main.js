@@ -42,11 +42,12 @@ function retrieveToDosFromStorage() {
 }
 
 function searchTasks() {
-  let userInput = searchInput.value.trim();
+  let userInput = searchInput.value.trim().toLowerCase();
+  console.log(userInput);
   let allTaskCards = Array.from(document.querySelectorAll(".taskbox"));
   allTaskCards.forEach((task) => {
     var todoTitle = task.querySelector("#taskbox-title");
-    if (!todoTitle.innerText.includes(userInput)) {
+    if (!todoTitle.innerText.toLowerCase().includes(userInput)) {
       task.classList.add("hidden");
     } else {
       task.classList.remove("hidden");
@@ -104,6 +105,39 @@ function modifyTasks(event) {
   }
 }
 
+function updateTaskTitle(id) {
+  let currentTitle = event.target;
+  currentTitle.classList.add("hidden");
+  currentTitle.nextSibling.nextSibling.classList.remove("hidden");
+  currentTitle.parentNode.firstElementChild.classList.add("hidden");
+  currentTitle.nextSibling.nextSibling.nextSibling.nextSibling.classList.remove("hidden");
+}
+
+function changeTaskTitle(id) {
+  let updatedTitle = event.target.closest(".top-of-taskbox").children[2].value;
+  if (!updatedTitle) {
+    updatedTitle = event.target.closest(".top-of-taskbox").children[2]
+      .placeholder;
+  }
+  console.log(event.target.closest(".top-of-taskbox").children[2].placeholder);
+  let currentTaskList = findCurrentTaskList(id);
+  localStorageArray.forEach((list) => {
+    if (list.id === parseInt(id)) {
+      list.title = updatedTitle
+    }
+  });
+  let currentTitle = event.target;
+  currentTitle.classList.add("hidden");
+  currentTitle.parentNode.children[2].classList.add("hidden")
+  currentTitle.parentNode.children[0].classList.remove("hidden")
+  currentTitle.parentNode.children[0].innerText = updatedTitle
+  currentTitle.parentNode.children[2].placeholder = updatedTitle;
+  currentTitle.parentNode.children[1].classList.remove("hidden")
+
+
+  currentTaskList.saveToStorage();
+
+}
 
 function checkOffTasks() {
   var listImage = event.target;
@@ -142,6 +176,11 @@ function urgentButton() {
   target.parentNode.parentNode.firstElementChild.classList.toggle(
     "urgent-style"
   );
+  // changes input background to match
+  target.parentNode.parentNode.firstElementChild.
+    firstElementChild.nextSibling.nextSibling.
+    nextSibling.nextSibling.classList.toggle("urgent-style");
+
   // changes the middle part to urgent
   target.parentNode.parentNode.firstElementChild.nextSibling.nextSibling.classList.toggle(
     "urgent-style"
@@ -185,24 +224,19 @@ function deleteTaskList(id) {
 }
 
 function displayCard(list) {
-  var tasksDisplayed = "<ul>";
-  for (var i = 0; i < list.tasks.length; i++) {
-    var image = `<img src="${list.tasks[i].completed ? "images/checkbox-active.svg" : "images/checkbox.svg"}"
-    alt="checkbox button" class="checkbox-btn" data-completed=${list.tasks[i].completed} data-id=${list.tasks[i].id} />`;
-    tasksDisplayed =
-      tasksDisplayed +
-      `<li class="list-item ${list.tasks[i].completed && "task-list-checked"}">` +
-      image +
-      `<p>${list.tasks[i].taskName}</p>` +
-      "</li>";
-  }
-  tasksDisplayed = tasksDisplayed + "</ul>";
+  let tasksDisplayed = loadAllTasksToTaskList(list);
+
   taskDisplayArea.insertAdjacentHTML(
     "beforeend",
     `
-  <section class="taskbox taskbox${list.id}" data-id=${list.id}>
+  <section class="taskbox" data-id=${list.id}>
     <div class="top-of-taskbox ${list.urgent && "urgent-style"}">
       <p id="taskbox-title">${list.title}</p>
+      <img src="images/create-outline.svg" class="edit-task-title" alt="edit-button"
+      onclick="updateTaskTitle()" />
+      <input class="hidden title-input ${list.urgent && "urgent-style"}" placeholder="${list.title}" />
+      <img class="hidden " id="save-task-title" src="images/save-outline.svg" alt="save-button"
+      onclick="changeTaskTitle(${list.id})" />
     </div>
     <div class="task-list ${list.urgent && "urgent-style"}">
         ${tasksDisplayed}
@@ -220,6 +254,29 @@ function displayCard(list) {
   </section>`
   );
   clearAllAside();
+}
+
+function loadAllTasksToTaskList(list) {
+  let tasksDisplayed = "<ul>";
+  for (var i = 0; i < list.tasks.length; i++) {
+    var image = `<img src="${
+      list.tasks[i].completed
+        ? "images/checkbox-active.svg"
+        : "images/checkbox.svg"
+    }"
+    alt="checkbox button" class="checkbox-btn" data-completed=${
+  list.tasks[i].completed} data-id=${list.tasks[i].id} />`;
+    tasksDisplayed =
+        tasksDisplayed +
+        `<li class="list-item ${
+          list.tasks[i].completed && "task-list-checked"
+        }">` +
+        image +
+        `<p>${list.tasks[i].taskName}</p>` +
+        "</li>";
+  }
+  tasksDisplayed = tasksDisplayed + "</ul>";
+  return tasksDisplayed;
 }
 
 function addRoughDraftTasks() {
