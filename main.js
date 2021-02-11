@@ -7,7 +7,7 @@ var initialGreeting = document.querySelector(".initial-greeting");
 var searchInput = document.querySelector(".search-input");
 var filterButton = document.querySelector(".filter");
 var roughDraftTasks = [];
-var localStorageArray = [];
+var allToDoLists = [];
 
 asideButtons.addEventListener("click", clickAsideButtons);
 roughDraftSection.addEventListener("click", deleteRoughDraftTask);
@@ -36,7 +36,7 @@ function retrieveToDosFromStorage() {
       tasksArray,
       retrievedLists[i].urgent
     );
-    localStorageArray.push(list);
+    allToDoLists.push(list);
     displayCard(list);
   }
 }
@@ -105,7 +105,7 @@ function modifyTasks(event) {
   }
 }
 
-function updateTaskTitle(id) {
+function updateTaskTitle() {
   let currentTitle = event.target;
   currentTitle.classList.add("hidden");
   currentTitle.nextSibling.nextSibling.classList.remove("hidden");
@@ -119,20 +119,19 @@ function changeTaskTitle(id) {
     updatedTitle = event.target.closest(".top-of-taskbox").children[2]
       .placeholder;
   }
-  console.log(event.target.closest(".top-of-taskbox").children[2].placeholder);
   let currentTaskList = findCurrentTaskList(id);
-  localStorageArray.forEach((list) => {
+  allToDoLists.forEach((list) => {
     if (list.id === parseInt(id)) {
       list.title = updatedTitle
     }
   });
   let currentTitle = event.target;
   currentTitle.classList.add("hidden");
-  currentTitle.parentNode.children[2].classList.add("hidden")
   currentTitle.parentNode.children[0].classList.remove("hidden")
   currentTitle.parentNode.children[0].innerText = updatedTitle
-  currentTitle.parentNode.children[2].placeholder = updatedTitle;
   currentTitle.parentNode.children[1].classList.remove("hidden")
+  currentTitle.parentNode.children[2].classList.add("hidden")
+  currentTitle.parentNode.children[2].placeholder = updatedTitle;
 
 
   currentTaskList.saveToStorage();
@@ -148,15 +147,12 @@ function checkOffTasks() {
   }
   listImage.parentNode.classList.toggle("task-list-checked");
   let taskId = event.target.dataset.id;
-  console.log(event.target.dataset.id);
   let taskListId = event.target.closest(".taskbox").dataset.id;
   let currentTaskList = findCurrentTaskList(taskListId);
 
   let currentTask = currentTaskList.tasks.find(task => task.id === parseInt(taskId));
   currentTask.updateTask();
-  console.log(currentTaskList);
   currentTaskList.saveToStorage();
-  console.log(currentTask);
 
 }
 
@@ -180,15 +176,16 @@ function urgentButton() {
   target.parentNode.parentNode.firstElementChild.
     firstElementChild.nextSibling.nextSibling.
     nextSibling.nextSibling.classList.toggle("urgent-style");
-
   // changes the middle part to urgent
   target.parentNode.parentNode.firstElementChild.nextSibling.nextSibling.classList.toggle(
     "urgent-style"
   );
-  for (var i = 0; i < localStorageArray.length; i++) {
-    if (parseInt(taskBox.dataset.id) === localStorageArray[i].id) {
-      localStorageArray[i].updateToDo();
-      // localStorageArray[i].saveToStorage();
+  // let allTasks = Array.from(document.querySelectorAll(`${taskBox.dataset.id}`));
+  let allTasks = Array.from(document.getElementsByClassName(`${taskBox.dataset.id}`));
+  allTasks.forEach(task => task.classList.toggle("urgent-style"))
+  for (var i = 0; i < allToDoLists.length; i++) {
+    if (parseInt(taskBox.dataset.id) === allToDoLists[i].id) {
+      allToDoLists[i].updateUrgency();
     }
   }
 }
@@ -200,22 +197,22 @@ function makeList() {
     return;
   }
   var newList = new ToDoList(Date.now(), taskTitle, roughDraftTasks);
-  localStorageArray.push(newList);
+  allToDoLists.push(newList);
   newList.saveToStorage();
   displayCard(newList);
 }
 
 function findCurrentTaskList(id) {
-  return localStorageArray.find(list=> list.id === parseInt(id))
+  return allToDoLists.find(list=> list.id === parseInt(id))
 }
 
 function deleteTaskList(id) {
   
   let currentTaskList = findCurrentTaskList(id)
 
-  let updatedLists = localStorageArray.filter((list) => list.id !== id);
-  localStorageArray = updatedLists;
-  if (!localStorageArray.length) {
+  let updatedLists = allToDoLists.filter((list) => list.id !== id);
+  allToDoLists = updatedLists;
+  if (!allToDoLists.length) {
     initialGreeting.classList.remove("hide");
   }
   currentTaskList.deleteFromStorage()
@@ -267,16 +264,29 @@ function loadAllTasksToTaskList(list) {
     alt="checkbox button" class="checkbox-btn" data-completed=${
   list.tasks[i].completed} data-id=${list.tasks[i].id} />`;
     tasksDisplayed =
-        tasksDisplayed +
-        `<li class="list-item ${
-          list.tasks[i].completed && "task-list-checked"
-        }">` +
-        image +
-        `<p>${list.tasks[i].taskName}</p>` +
-        "</li>";
+      tasksDisplayed +
+      `<li class="list-item ${
+        list.tasks[i].completed && "task-list-checked"
+      }">` +
+      image +
+      `<p class="ind-task" onclick="editTask()">${list.tasks[i].taskName}</p>
+        <input class="hidden task-input ${list.id} ${list.urgent && "urgent-style"}" 
+         placeholder="${list.tasks[i].taskName}" />
+        <img class="hidden" id="save-task" src="images/save-outline.svg" alt="save-button"
+      onclick="saveEditedTask(${list.tasks[i].id})" />
+        ` +
+      "</li>";
   }
   tasksDisplayed = tasksDisplayed + "</ul>";
   return tasksDisplayed;
+}
+
+function editTask() {
+  let currentTask = event.target;
+  currentTask.classList.add("hidden");
+  currentTask.nextSibling.nextSibling.classList.remove("hidden");
+  currentTask.nextSibling.nextSibling.
+    nextSibling.nextSibling.classList.remove("hidden");
 }
 
 function addRoughDraftTasks() {
