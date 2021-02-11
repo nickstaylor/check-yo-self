@@ -54,7 +54,7 @@ main {
 
 aside {
   height: 90vh;
-  width: 30%;
+  /* width: 30%; */
   background-color: #587a8a;
   vertical-align: top;
   overflow: hidden;
@@ -219,12 +219,11 @@ button:hover {
 
 .task-list ul li {
   display: flex;
+  align-items: center;
   margin-bottom: -10px;
+  height: 45px;
 }
 
-.task-list ul li p {
-  margin-top: 11px;
-}
 
 .task-list {
   border: 2px solid #c7d3d8;
@@ -286,10 +285,9 @@ button:hover {
 }
 
 .checkbox-btn {
-  height: 25px;
-  width: 25px;
-  padding-right: 5px;
-  padding-top: 10px;
+  height: 22px;
+  width: 22px;
+  padding-right: 7px;
 }
 
 .rough-draft-card {
@@ -321,4 +319,26 @@ button:hover {
 
 .hidden {
   display: none;
+}
+
+.ind-task:hover{
+  cursor: pointer;
+}
+
+.task-input {
+  width: 70%;
+  font-size: .7em;
+  height: 15px;
+  border-radius: 5px;
+  border: 2px solid #c7d3d8;
+  padding-right: 5px;
+}
+
+#save-task {
+  height: 15px;
+  width: 15px;
+}
+
+#save-task:hover {
+  cursor: pointer;
 }
