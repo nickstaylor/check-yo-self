@@ -8,5 +8,9 @@ class Task {
   updateTask() {
     this.completed = !this.completed;
   }
+
+  editTask(updatedTask) {
+    this.taskName = updatedTask;
+  }
 }
  
