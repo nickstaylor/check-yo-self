@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 var roughDraftSection = document.querySelector(".rough-draft-card");
 var roughDraftTask = document.querySelector(".task-item");
 var asideButtons = document.querySelector(".aside-section");
@@ -14,7 +15,9 @@ roughDraftSection.addEventListener("click", deleteRoughDraftTask);
 taskDisplayArea.addEventListener("click", modifyTasks);
 searchInput.addEventListener("keyup", searchTasks);
 filterButton.addEventListener("click", filterUrgentTasks);
+
 window.onload = retrieveToDosFromStorage;
+
 
 function retrieveToDosFromStorage() {
   let localStorageLists = localStorage.getItem("allLists");
@@ -105,12 +108,36 @@ function modifyTasks(event) {
   }
 }
 
-function updateTaskTitle() {
+function inputsActivated(input, id) {
+  if (input === "title") {
+    let saveTaskTitle = document.getElementById("save-task-title");
+    saveTaskTitle.addEventListener("keypress", ()=> enterSubmit("title", id));
+  }
+  if (input === "task") {
+    let saveNewTask = document.getElementById("save-task");
+    saveNewTask.addEventListener("keypress", ()=> enterSubmit("task", id));
+  }
+}
+
+function enterSubmit(input, id) {
+  if (event.keyCode === 13) {
+    input === "title" && changeTaskTitle(id);
+    
+    input === "task" && saveEditedTask(id);
+  }
+}
+
+
+function updateTaskTitle(id) {
   let currentTitle = event.target;
   currentTitle.classList.add("hidden");
   currentTitle.nextSibling.nextSibling.classList.remove("hidden");
   currentTitle.parentNode.firstElementChild.classList.add("hidden");
   currentTitle.nextSibling.nextSibling.nextSibling.nextSibling.classList.remove("hidden");
+  // focuses tab on input
+  let currentInput = document.getElementsByClassName(`${id}`);
+  currentInput[0].focus();
+  inputsActivated('title', id);
 }
 
 function changeTaskTitle(id) {
@@ -132,6 +159,7 @@ function changeTaskTitle(id) {
   currentTitle.parentNode.children[1].classList.remove("hidden")
   currentTitle.parentNode.children[2].classList.add("hidden")
   currentTitle.parentNode.children[2].placeholder = updatedTitle;
+  currentTitle.parentNode.children[2].value = ""
 
 
   currentTaskList.saveToStorage();
@@ -192,10 +220,14 @@ function urgentButton() {
 
 function makeList() {
   var taskTitle = taskTitleBox.value;
-  initialGreeting.classList.add("hide");
-  if (taskTitle === "" || roughDraftTasks.length === 0) {
+  if (!taskTitle) {
+    window.alert("Please enter a title for the list")
     return;
   }
+  if (roughDraftTasks.length === 0) {
+    return;
+  }
+  initialGreeting.classList.add("hide");
   var newList = new ToDoList(Date.now(), taskTitle, roughDraftTasks);
   allToDoLists.push(newList);
   newList.saveToStorage();
@@ -230,10 +262,10 @@ function displayCard(list) {
     <div class="top-of-taskbox ${list.urgent && "urgent-style"}">
       <p id="taskbox-title">${list.title}</p>
       <img src="images/create-outline.svg" class="edit-task-title" alt="edit-button"
-      onclick="updateTaskTitle()" />
-      <input class="hidden title-input ${list.urgent && "urgent-style"}" placeholder="${list.title}" />
-      <img class="hidden " id="save-task-title" src="images/save-outline.svg" alt="save-button"
-      onclick="changeTaskTitle(${list.id})" />
+      onclick="updateTaskTitle(${list.id})" />
+      <input class="hidden title-input ${list.id} ${list.urgent && "urgent-style"}" tabindex="1" placeholder="${list.title}" />
+      <img class="hidden" id="save-task-title" data-id="${list.id}" src="images/save-outline.svg" alt="save-button"
+      onclick="changeTaskTitle(${list.id})" tabindex="2" />
     </div>
     <div class="task-list ${list.urgent && "urgent-style"}">
         ${tasksDisplayed}
@@ -254,7 +286,8 @@ function displayCard(list) {
 }
 
 function loadAllTasksToTaskList(list) {
-  let tasksDisplayed = "<ul>";
+  let tasksDisplayed = `<img class="add-task-to-list-button" src="images/add-circle-outline.svg"
+   onclick="addTaskToExisitingToDoList()" /><ul>`;
   for (var i = 0; i < list.tasks.length; i++) {
     var image = `<img src="${
       list.tasks[i].completed
@@ -262,18 +295,25 @@ function loadAllTasksToTaskList(list) {
         : "images/checkbox.svg"
     }"
     alt="checkbox button" class="checkbox-btn" data-completed=${
-  list.tasks[i].completed} data-id=${list.tasks[i].id} />`;
+  list.tasks[i].completed} data-id="${list.tasks[i].id}" />`;
     tasksDisplayed =
       tasksDisplayed +
       `<li class="list-item ${
         list.tasks[i].completed && "task-list-checked"
       }">` +
       image +
-      `<p class="ind-task" onclick="editTask()">${list.tasks[i].taskName}</p>
-        <input class="hidden task-input ${list.id} ${list.urgent && "urgent-style"}" 
-         placeholder="${list.tasks[i].taskName}" />
-        <img class="hidden" id="save-task" src="images/save-outline.svg" alt="save-button"
-      onclick="saveEditedTask(${list.tasks[i].id})" />
+      `<p class="ind-task" onclick="editTask(${list.tasks[i].id})">${
+        list.tasks[i].taskName
+      }</p>
+        <input class="hidden task-input ${list.id} ${list.tasks[i].id}
+        ${list.urgent && "urgent-style"}" 
+         placeholder="${list.tasks[i].taskName}" tabindex="1" data-id="${
+        list.id
+      }" />
+        <img class="hidden" id="save-task" src="images/save-outline.svg"
+         tabindex="2" alt="save-button" onclick="saveEditedTask(${
+           list.tasks[i].id
+         })" />
         ` +
       "</li>";
   }
@@ -281,12 +321,46 @@ function loadAllTasksToTaskList(list) {
   return tasksDisplayed;
 }
 
-function editTask() {
+function editTask(id) {
+  
   let currentTask = event.target;
   currentTask.classList.add("hidden");
   currentTask.nextSibling.nextSibling.classList.remove("hidden");
   currentTask.nextSibling.nextSibling.
     nextSibling.nextSibling.classList.remove("hidden");
+  let currentInput = document.getElementsByClassName(`${id}`);
+  currentInput[0].focus();
+  inputsActivated('task', id);
+}
+
+function saveEditedTask(id) {
+  let updatedTask = event.target.parentNode.children[2].value;
+  
+  if (!updatedTask) {
+    updatedTask = event.target.parentNode.children[2].placeholder;
+  }
+ 
+  let toDoListId = event.target.parentNode.children[2].dataset.id;
+
+  let currentTaskList = findCurrentTaskList(toDoListId);
+  // currentTaskList.editTask(id, updatedTask);
+  let currentTask = currentTaskList.tasks.find((task) => task.id === parseInt(id));
+  currentTask.editTask(updatedTask);
+  allToDoLists.forEach((list) => {
+    if (list.id === parseInt(toDoListId)) {
+
+      list = currentTaskList
+    }
+  });
+  console.log(allToDoLists);
+  currentTaskList.saveToStorage();
+
+  event.target.parentNode.children[2].placeholder = updatedTask;
+  event.target.parentNode.children[2].classList.add("hidden");
+  event.target.parentNode.children[3].classList.add("hidden");
+  event.target.parentNode.children[1].innerText = updatedTask;
+  event.target.parentNode.children[1].classList.remove("hidden");
+
 }
 
 function addRoughDraftTasks() {
@@ -298,7 +372,7 @@ function addRoughDraftTasks() {
   roughDraftSection.insertAdjacentHTML(
     "beforeend",
     `
-  <div class="roughdraftitem"><img src="images/delete.svg"
+  <div class="rough-draft-item"><img src="images/delete.svg"
   alt="delete button" class="delete-btn-rough" /><p data-id=${task.id}>${task.taskName}</p></div>`
   );
   roughDraftTasks.push(task);
