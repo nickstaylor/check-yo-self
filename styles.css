@@ -29,6 +29,7 @@ span {
   width: 300px;
   font-size: 30px;
   border-radius: 0 7px 7px 0;
+  /* color: green; */
 }
 
 .search-container {
@@ -77,7 +78,7 @@ aside {
 .aside-title input {
   width: 97%;
   height: 40px;
-  font-size: 2em;
+  font-size: 1.5em;
 }
 
 .aside-title p,
@@ -87,8 +88,9 @@ aside {
 }
 
 .task-item-section {
-  display: inline-flex;
+  display: flex;
 }
+
 
 .aside-task-item {
   width: 90%;
@@ -99,16 +101,16 @@ aside {
 }
 
 .task-item {
-  width: 85%;
-  height: 40px;
+  width: 80%;
+  /* height: 40px; */
   font-size: 24px;
 }
 
 .add-task-button {
   background-color: #1f1f3d;
   color: #FFFFFF;
-  margin-right: auto;
-  width: 15%;
+  width: 20%;
+  /* height: 40px; */
   font-size: 32px;
 }
 
@@ -120,7 +122,8 @@ aside {
   box-sizing: border-box;
   font-size: 20px;
   height: 40px;
-  outline: none: border: 0px;
+  outline: none;
+  border: 0px;
 }
 
 button:hover {
@@ -226,6 +229,7 @@ button:hover {
 
 
 .task-list {
+  position: relative;
   border: 2px solid #c7d3d8;
   color: #1f1f3d;
   font-size: 30px;
@@ -297,10 +301,15 @@ button:hover {
   color: #FFFFFF;
 }
 
-.roughdraftitem {
-  display: inline-flex;
+.rough-draft-item {
+  display: flex;
   align-items: center;
-  font-size: 24px;
+  font-size: 20px;
+  margin-bottom: 3px
+}
+
+.rough-draft-item p {
+  margin: 0px;
 }
 
 .urgent-font {
@@ -340,5 +349,17 @@ button:hover {
 }
 
 #save-task:hover {
+  cursor: pointer;
+}
+
+.add-task-to-list-button{
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  height: 18px;
+  width: 18px;
+}
+
+.add-task-to-list-button:hover {
   cursor: pointer;
 }
