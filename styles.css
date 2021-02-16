@@ -27,25 +27,24 @@ span {
 
 .search-container input {
   width: 300px;
-  font-size: 30px;
+  font-size: 24px;
   border-radius: 0 7px 7px 0;
-  /* color: green; */
 }
 
 .search-container {
   display: inline-flex;
   margin-right: 40px;
+  height: 50px;
 }
 
 .search-container button {
-
   border-radius: 7px 0 0 7px;
 }
 
 .search-icon {
   margin-top: 5px;
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
 }
 
 main {
@@ -55,7 +54,6 @@ main {
 
 aside {
   height: 90vh;
-  /* width: 30%; */
   background-color: #587a8a;
   vertical-align: top;
   overflow: hidden;
@@ -66,12 +64,10 @@ aside {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  /* height: 90vh; */
 }
 
 .aside-title {
   width: 90%;
-  /* margin-bottom: 30px; */
   margin: 0 5% 30px 5%;
 }
 
@@ -91,7 +87,6 @@ aside {
   display: flex;
 }
 
-
 .aside-task-item {
   width: 90%;
 }
@@ -102,7 +97,6 @@ aside {
 
 .task-item {
   width: 80%;
-  /* height: 40px; */
   font-size: 24px;
 }
 
@@ -110,7 +104,6 @@ aside {
   background-color: #1f1f3d;
   color: #FFFFFF;
   width: 20%;
-  /* height: 40px; */
   font-size: 32px;
 }
 
@@ -152,10 +145,6 @@ button:hover {
   overflow: scroll;
 }
 
-.hide {
-  display: none;
-}
-
 .initial-greeting {
   padding-left: 50px;
   font-weight: bold;
@@ -167,6 +156,7 @@ button:hover {
   column-width: 20em;
   margin-left: 5px;
   margin-top: 5px;
+  z-index: 1;
 }
 
 .taskbox {
@@ -213,7 +203,6 @@ button:hover {
   width: 80%;
 }
 
-
 .task-list ul {
   font-size: 20px;
   list-style: none;
@@ -226,7 +215,6 @@ button:hover {
   margin-bottom: -10px;
   height: 45px;
 }
-
 
 .task-list {
   position: relative;
@@ -294,6 +282,10 @@ button:hover {
   padding-right: 7px;
 }
 
+.checkbox-btn:hover {
+  cursor: crosshair;
+}
+
 .rough-draft-card {
   display: flex;
   flex-direction: column;
@@ -326,14 +318,6 @@ button:hover {
   color: #3c6577;
 }
 
-.hidden {
-  display: none;
-}
-
-.ind-task:hover{
-  cursor: pointer;
-}
-
 .task-input {
   width: 70%;
   font-size: .7em;
@@ -343,16 +327,20 @@ button:hover {
   padding-right: 5px;
 }
 
-#save-task {
+.save-task, .delete-new-task, .add-new-task {
   height: 15px;
   width: 15px;
 }
 
-#save-task:hover {
+.save-task:hover, .delete-new-task:hover, .add-new-task:hover, .ind-task:hover  {
   cursor: pointer;
 }
 
-.add-task-to-list-button{
+.delete-new-task, .add-new-task {
+  margin-left: 5px;
+}
+
+.add-task-to-list-button {
   position: absolute;
   bottom: 5px;
   right: 5px;
@@ -361,5 +349,54 @@ button:hover {
 }
 
 .add-task-to-list-button:hover {
-  cursor: pointer;
+  cursor: copy;
+}
+
+.delete-modal {
+  height: 10em;
+  width: 10em;
+  background-color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 15px;
+  opacity: 1;
+  transition: all 300ms ease-in-out;
+  z-index: 1011;
+}
+
+.delete-modal p {
+  text-align: center;
+}
+
+.delete-modal span {
+  font-style: italic;
+  color: #B23A25;
+}
+
+.modal-delete-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.modal-delete-buttons button {
+  background-color: #1f1f3d;
+  color: #FFFFFF;
+  height: 30px;
+}
+
+.body-blackout {
+  position: absolute;
+  z-index: 1010;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .65);
+  display: block;
+}
+
+.hidden {
+  display: none;
 }
