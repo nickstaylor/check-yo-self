@@ -21,6 +21,8 @@ class ToDoList {
     this.saveToStorage();
   }
 
- 
+  addTask(task) {
+    this.tasks.push(task);
+  }
 
 }
